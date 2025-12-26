@@ -13,6 +13,23 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+
+           // আগে কলামগুলো ডিফাইন করুন
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('category_id');
+
+            // তারপর ফরেন কি রিলেশনগুলো লিখুন
+            $table->foreign('user_id')->references('id')->on('users')
+                ->cascadeOnUpdate()->restrictOnDelete();
+                
+            $table->foreign('category_id')->references('id')->on('categories')
+                ->cascadeOnUpdate()->restrictOnDelete();
+
+            $table->string('name', 100);
+            $table->string('price', 50);
+            $table->string('unit', 50);
+            $table->string('image')->nullable();
+            
             $table->timestamps();
         });
     }
