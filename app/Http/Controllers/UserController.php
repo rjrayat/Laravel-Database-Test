@@ -71,4 +71,11 @@ class UserController extends Controller
                 'email' => $request->user_email
             ]);
         }
+
+    public function Logout(){
+            return response()->json([
+                'status' => true,
+                'message'=> "Logout successful. Please delete token from client"
+            ]);
+        }
 }

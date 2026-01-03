@@ -26,7 +26,7 @@ class JWTMiddleware
         }
 
         // Bearer Remove
-        $token = str_replace('Bearer', '', $token);
+        $token = trim(str_replace('Bearer', '', $token));
 
         // Token Verify
         $decoded = JWTTOKEN::VerifyToken($token);
