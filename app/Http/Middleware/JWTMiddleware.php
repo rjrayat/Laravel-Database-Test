@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Helper\JWTTOKEN;
+use App\Models\BlackListedToken;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,12 +39,34 @@ class JWTMiddleware
             ], 401);
         }
 
-        //Request user info attach
+        // //Request user info attach
 
-        $request -> merge([
-            'user_id' => $decoded -> sub,
-            'user_email'=> $decoded -> email,
-        ]);
+        // $request -> merge([
+        //     'user_id' => $decoded -> sub,
+        //     'user_email'=> $decoded -> email,
+        // ]);
+
+
+        $blacklisted= BlackListedToken::where('token', $token)->first();
+        if($blacklisted){
+            return response()->json([
+            'status' => false,
+            'message' => 'Token is blacklisted. Please login again.'
+        ], 401);
+        }
+
+         // 🔥 REAL STEP: Load user from DB
+        $user = User::find($decoded->sub);
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // attach full user object
+        $request->attributes->set('auth_user', $user);
+
 
         return $next($request);
 

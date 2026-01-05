@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\JWTTOKEN;
+use App\Models\BlackListedToken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -65,14 +66,28 @@ class UserController extends Controller
                 ], 401);
             }
 
+            // return response()->json([
+            //     'status' => true,
+            //     'user_id' => $request->user_id,
+            //     'email' => $request->user_email
+            // ]);
+
             return response()->json([
                 'status' => true,
-                'user_id' => $request->user_id,
-                'email' => $request->user_email
+                'user' => $request->get('auth_user')
             ]);
         }
 
-    public function Logout(){
+    public function Logout(Request $request){
+        $token = trim(str_replace('Bearer', '', $request->header('Authorization')));
+
+        // token expire time বের করা
+        $decoded= JWTTOKEN::VerifyToken($token);
+
+        BlackListedToken::create([
+            'token' =>  $token,
+            'expires_at' => date('Y-m-d H:i:s',$decoded->exp)
+        ]);
             return response()->json([
                 'status' => true,
                 'message'=> "Logout successful. Please delete token from client"
