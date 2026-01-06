@@ -19,7 +19,8 @@ class UserSeeder extends Seeder
             'mobile'=>'01234567890',
             'email' => 'rjrayat37@gmail.com',
             'otp' => null, // 👈 add this
-            'password' => Hash::make('11111')
+            'password' => Hash::make('11111'),
+            'role' => 'admin'
             
 
         ]);

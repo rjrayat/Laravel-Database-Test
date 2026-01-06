@@ -44,39 +44,48 @@ class UserController extends Controller
     }
 
 
-    public function Profile(Request $request)
-        {
-            $token = $request->header('Authorization');
+    // public function Profile(Request $request)
+    //     {
+    //         $token = $request->header('Authorization');
 
-            if (!$token) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Token missing'
-                ], 401);
-            }
+    //         if (!$token) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Token missing'
+    //             ], 401);
+    //         }
 
-            $token = str_replace('Bearer ', '', $token);
+    //         $token = str_replace('Bearer ', '', $token);
 
-            $decoded = JWTTOKEN::VerifyToken($token);
+    //         $decoded = JWTTOKEN::VerifyToken($token);
 
-            if ($decoded === false) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Invalid token'
-                ], 401);
-            }
+    //         if ($decoded === false) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Invalid token'
+    //             ], 401);
+    //         }
 
-            // return response()->json([
-            //     'status' => true,
-            //     'user_id' => $request->user_id,
-            //     'email' => $request->user_email
-            // ]);
+    //         // return response()->json([
+    //         //     'status' => true,
+    //         //     'user_id' => $request->user_id,
+    //         //     'email' => $request->user_email
+    //         // ]);
 
-            return response()->json([
-                'status' => true,
-                'user' => $request->get('auth_user')
-            ]);
-        }
+    //         return response()->json([
+    //             'status' => true,
+    //             'user' => $request->get('auth_user')
+    //         ]);
+    //     }
+
+    public function profile(Request $request)
+    {
+        return response()->json([
+            'status' => true,
+            'user' => $request->auth_user
+    ]);
+}
+
 
     public function Logout(Request $request){
         $token = trim(str_replace('Bearer', '', $request->header('Authorization')));

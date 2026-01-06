@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // JWT Middleware alias
         $middleware->alias([
             'jwt' => \App\Http\Middleware\JWTMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
         // Inertia Middleware
         $middleware->web(

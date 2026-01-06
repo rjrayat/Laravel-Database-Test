@@ -64,8 +64,12 @@ class JWTMiddleware
             ], 404);
         }
 
-        // attach full user object
-        $request->attributes->set('auth_user', $user);
+        // // attach full user object
+        // $request->attributes->set('auth_user', $user);
+
+        $request->merge([
+            'auth_user' => $user
+        ]);
 
 
         return $next($request);

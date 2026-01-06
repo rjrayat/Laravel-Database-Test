@@ -8,6 +8,11 @@ Route::post('/user-login', [UserController::class, 'UserLogin']);
 
 Route::middleware('jwt')->get('/profile', [UserController::class, 'profile']);
 
+Route::middleware(['jwt', 'role:admin'])->get('/admin', function () {
+    return response()->json([
+        'message' => 'Admin access granted'
+    ]);
+});
 Route::middleware('jwt')->group(function(){
     Route::post('/logout',[UserController::class,'Logout']);
 });
